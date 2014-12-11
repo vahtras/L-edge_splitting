@@ -1,0 +1,7 @@
+*.dvi
+*.log
+*.bbl
+*.aux
+*.blg
+*.gz
+*.[0-9]
