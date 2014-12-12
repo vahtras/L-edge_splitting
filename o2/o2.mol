@@ -1,0 +1,7 @@
+ATOMBASIS
+Energy calculation without symmetry
+Basis set specified with ATOMBASIS
+    1    
+        8.    2      Basis=STO-3G
+O         0.0 0.0 -1.2249058930 
+O         0.0 0.0 1.2249058930 
