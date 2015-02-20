@@ -4,4 +4,7 @@
 *.aux
 *.blg
 *.gz
+*.out
 *.[0-9]
+*INT*
+*SIR*
