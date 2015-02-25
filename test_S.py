@@ -1,4 +1,5 @@
 import unittest
+import mock
 import sys
 import os
 import numpy
@@ -15,6 +16,7 @@ class S_Test(unittest.TestCase):
     def setUp(self):
         self.subdir = 'S'
         self.mol = 'S'
+        self.dal_tar_gz = "%s/hf_%s.tar.gz" % (self.subdir, self.mol)
         sirius_rst = "%s/hf_%s.SIRIUS.RST" % (self.subdir, self.mol)
         self.cmo = SiriusRestart(name=sirius_rst).cmo
         self.aoproper = "%s/hf_%s.AOPROPER" % (self.subdir, self.mol)
@@ -59,7 +61,44 @@ class S_Test(unittest.TestCase):
             rtol=1e-6
         )
 
+    def test_make_V(self):
+        units = [i*numpy.identity(3) for i in (2, 4, 6)]
+        expect = [[3j, 0, 0, 1j - 2, 0, 0],
+                  [0, 3j, 0, 0, 1j - 2, 0],
+                  [0, 0, 3j, 0, 0, 1j - 2],
+                  [1j + 2, 0, 0, -3j, 0, 0],
+                  [0, 1j + 2, 0, 0, -3j, 0],
+                  [0, 0, 1j + 2, 0, 0, -3j]]
+        numpy.testing.assert_allclose(makeV(units), expect)   
+
+    def test_eigenvalues(self):
+        V = [[0, .5j], [-.5j, 0]]
+        numpy.testing.assert_allclose(
+            get_eigen(V),
+            [-0.5, 0.5]
+        )
             
+    @mock.patch('two_p_hole.tarfile.open')
+    def test_untar(self, mock_open):
+        two_p_eigenvalues(self.dal_tar_gz, self.symorb)
+        mock_open.return_value = mock.Mock()
+        mock_open.assert_called_with(self.dal_tar_gz, 'r:gz')
+
+    @mock.patch('two_p_hole.tarfile.open')
+    def test_extract(self, mock_open):
+        mock_return_object = mock.Mock()
+        mock_open.return_value = mock_return_object
+        two_p_eigenvalues(self.dal_tar_gz, self.symorb)
+        mock_return_object.extractall.assert_called_with(
+            '/tmp', ['SIRIUS.RST', 'AOPROPER']
+        )
+
+
+    @unittest.skip('')
+    def test_all(self):
+        er = [-0.03389175,  0.01698019,  0.01691156, -0.03389175,  0.01691156,  0.01698019]
+        self.fail()
+
 
 if __name__ == "__main__":
     unittest.main()
