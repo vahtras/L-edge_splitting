@@ -93,12 +93,5 @@ class S_Test(unittest.TestCase):
             '/tmp', ['SIRIUS.RST', 'AOPROPER']
         )
 
-
-    @unittest.skip('')
-    def test_all(self):
-        er = [-0.03389175,  0.01698019,  0.01691156, -0.03389175,  0.01691156,  0.01698019]
-        self.fail()
-
-
 if __name__ == "__main__":
     unittest.main()
