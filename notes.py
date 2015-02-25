@@ -125,6 +125,7 @@ cmo0rel = cmorel.unblock()
 
 x, y, z = 9, 15, 23
 p = cmo0[:, (x, y, z)]
+print p
 p3 = cmo03[:, (x, y, z)]
 prel = cmo0rel[:, (x, y, z)]
 
@@ -137,6 +138,7 @@ prel = cmo0rel[:, (x, y, z)]
 from scipy.constants import alpha
 prefactor = alpha**2/2
 ls = [prefactor*p.T*M*p for M in angmom]
+print ls
 ls3 = [prefactor*p3.T*M*p3 for M in angmom]
 lsrel = [prefactor*prel.T*M*prel for M in angmom]
 
