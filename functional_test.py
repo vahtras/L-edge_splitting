@@ -30,5 +30,10 @@ class S_Test(unittest.TestCase):
         numpy.testing.assert_allclose(er, ref_er, rtol=1e-6)
 
 
+    def test_main(self):
+        sys.argv.append("{2: (1,), 3: (1,), 5: (1,)}")
+        sys.argv.append(self.dal_tar_gz)
+        main()
+
 if __name__ == "__main__":
     unittest.main()

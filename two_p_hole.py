@@ -54,7 +54,7 @@ def get_eigen(V):
     eigenvalues = numpy.linalg.eigvals(V)
     return numpy.sort(eigenvalues.real)
 
-if __name__ == "__main__":
+def main():
     
     import argparse
 
@@ -67,4 +67,5 @@ if __name__ == "__main__":
     exec "orbitals = %s" % args.orbitals
     print two_p_eigenvalues(args.daltargz, orbitals)
 
-
+if __name__ == "__main__":
+    main()
