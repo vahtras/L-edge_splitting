@@ -53,3 +53,18 @@ def makeV(ls):
 def get_eigen(V):
     eigenvalues = numpy.linalg.eigvals(V)
     return numpy.sort(eigenvalues.real)
+
+if __name__ == "__main__":
+    
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('orbitals', help='Select orbitals as dict')
+    parser.add_argument('daltargz', help='Dalton tar ball')
+
+    args = parser.parse_args()
+
+    exec "orbitals = %s" % args.orbitals
+    print two_p_eigenvalues(args.daltargz, orbitals)
+
+
