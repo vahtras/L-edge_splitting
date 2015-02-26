@@ -33,11 +33,11 @@ def get_ls(cmo, symorb, aoproper):
 
 def get_orbitals(cmo, symorb):
     indices = get_orbital_indices(cmo, symorb)
-    return cmo.unblock()[:, (9, 15, 23)]
+    return cmo.unblock()[:, indices]
 
 
 def get_orbital_indices(cmo, symorb):
-    indices = (sum(cmo.nrow[:sym-1]) for sym in symorb)
+    indices = (sum(cmo.nrow[:sym-1]) + orb-1 for sym in symorb for orb in symorb[sym])
     return tuple(indices)
 
     

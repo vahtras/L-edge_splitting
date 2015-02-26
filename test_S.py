@@ -93,5 +93,36 @@ class S_Test(unittest.TestCase):
             path='/tmp',
         )
 
+class S_NosymmetryTest(unittest.TestCase):
+
+    def setUp(self):
+        self.subdir = 'S_nosym'
+        self.mol = 'S'
+        self.dal_tar_gz = "%s/hf_%s.tar.gz" % (self.subdir, self.mol)
+        sirius_rst = "%s/hf_%s.SIRIUS.RST" % (self.subdir, self.mol)
+        self.cmo = SiriusRestart(name=sirius_rst).cmo
+        self.aoproper = "%s/hf_%s.AOPROPER" % (self.subdir, self.mol)
+        self.ls = prop.read(*labels, filename=self.aoproper)
+        self.symorb = {1:(3, 4, 5)}
+
+    def tearDown(self):
+        pass
+
+    def test_setup(self):
+        self.assertTupleEqual(tuple(self.cmo.nrow), (34,))
+
+    def test_get_2p_orbitals(self):
+        p_orbitals = get_orbitals(self.cmo, {1: (3, 4, 5)})
+        ref = numpy.loadtxt('S_nosym/p345.txt')
+        
+        print 'ps ', p_orbitals
+        print 'cmo', self.cmo[0][:, 2:5]
+        numpy.testing.assert_allclose(p_orbitals, ref, atol=1e-4)
+
+    def test_get_indices(self):
+        orbital_indices = get_orbital_indices(self.cmo, {1:(3, 4, 5,)})
+        self.assertTupleEqual(orbital_indices, (2, 3, 4))
+
 if __name__ == "__main__":
+
     unittest.main()
