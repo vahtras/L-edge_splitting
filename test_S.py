@@ -90,7 +90,7 @@ class S_Test(unittest.TestCase):
         mock_open.return_value = mock_return_object
         two_p_eigenvalues(self.dal_tar_gz, self.symorb)
         mock_return_object.extractall.assert_called_with(
-            '/tmp', ['SIRIUS.RST', 'AOPROPER']
+            path='/tmp',
         )
 
 if __name__ == "__main__":

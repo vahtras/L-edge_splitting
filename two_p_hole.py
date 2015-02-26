@@ -7,13 +7,24 @@ sys.path.append(os.path.join(os.environ['HOME'], 'dev/py'))
 from scipy.constants import alpha
 import numpy
 from daltools import prop
+from dalmisc.sirrst import SiriusRestart
 
 SO_FACTOR = alpha**2/2
 SO_LABELS = ('X1SPNORB', 'Y1SPNORB', 'Z1SPNORB')
 
 def two_p_eigenvalues(targz, select_orbitals):
     tgz = tarfile.open(targz, 'r:gz')
-    tgz.extractall(tempfile.gettempdir(), ['SIRIUS.RST', 'AOPROPER'])
+    tgz.extractall(path=tempfile.gettempdir())
+
+    sirius_rst = os.path.join(tempfile.gettempdir(), 'SIRIUS.RST')
+    aoproper = os.path.join(tempfile.gettempdir(), 'AOPROPER')
+
+    cmo = SiriusRestart(name=sirius_rst).cmo
+    ls = get_ls(cmo, select_orbitals, aoproper)
+    V = makeV(ls)
+    er = get_eigen(V)
+    return er
+    
 
 def get_ls(cmo, symorb, aoproper):
     orbitals = get_orbitals(cmo, symorb)
