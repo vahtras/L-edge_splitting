@@ -78,14 +78,22 @@ class S_Test(unittest.TestCase):
             [-0.5, 0.5]
         )
             
+    @mock.patch('two_p_hole.get_eigen')
+    @mock.patch('two_p_hole.makeV')
+    @mock.patch('two_p_hole.get_ls')
+    @mock.patch('two_p_hole.SiriusRestart')
     @mock.patch('two_p_hole.tarfile.open')
-    def test_untar(self, mock_open):
+    def test_untar(self, mock_open, mock_sir, mock_get_ls, mock_makeV, mock_e):
         two_p_eigenvalues(self.dal_tar_gz, self.symorb)
         mock_open.return_value = mock.Mock()
         mock_open.assert_called_with(self.dal_tar_gz, 'r:gz')
 
+    @mock.patch('two_p_hole.get_eigen')
+    @mock.patch('two_p_hole.makeV')
+    @mock.patch('two_p_hole.get_ls')
+    @mock.patch('two_p_hole.SiriusRestart')
     @mock.patch('two_p_hole.tarfile.open')
-    def test_extract(self, mock_open):
+    def test_extract(self, mock_open, mock_sir, mock_get_ls, mock_makeV, mock_e):
         mock_return_object = mock.Mock()
         mock_open.return_value = mock_return_object
         two_p_eigenvalues(self.dal_tar_gz, self.symorb)

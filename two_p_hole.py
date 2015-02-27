@@ -28,6 +28,7 @@ def two_p_eigenvalues(targz, select_orbitals):
 
 def get_ls(cmo, symorb, aoproper):
     orbitals = get_orbitals(cmo, symorb)
+    print "orbitals", orbitals
     spin_orbit_matrices = prop.read(*SO_LABELS, filename=aoproper)
     return [SO_FACTOR*orbitals.T*ls*orbitals for ls in spin_orbit_matrices]
 
