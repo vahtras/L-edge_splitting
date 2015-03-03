@@ -23,6 +23,9 @@ class S_Test(unittest.TestCase):
 
     def tearDown(self):
         sys.argv = ['S_Test']
+        os.unlink('/tmp/AOPROPER')
+        os.unlink('/tmp/SIRIUS.RST')
+        
 
 
     def test_all(self):
