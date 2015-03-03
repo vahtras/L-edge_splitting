@@ -123,8 +123,6 @@ class S_NosymmetryTest(unittest.TestCase):
         p_orbitals = get_orbitals(self.cmo, {1: (3, 4, 5)})
         ref = numpy.loadtxt('S_nosym/p345.txt')
         
-        print 'ps ', p_orbitals
-        print 'cmo', self.cmo[0][:, 2:5]
         numpy.testing.assert_allclose(p_orbitals, ref, atol=1e-4)
 
     def test_get_indices(self):
