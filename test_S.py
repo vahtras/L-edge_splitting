@@ -17,9 +17,11 @@ class S_Test(unittest.TestCase):
         self.subdir = 'S'
         self.mol = 'S'
         self.dal_tar_gz = "%s/hf_%s.tar.gz" % (self.subdir, self.mol)
-        sirius_rst = "%s/hf_%s.SIRIUS.RST" % (self.subdir, self.mol)
-        self.cmo = SiriusRestart(name=sirius_rst).cmo
+        restart_file = "%s/hf_%s.SIRIUS.RST" % (self.subdir, self.mol)
+        self.sirius_rst = SiriusRestart(name=restart_file)
+        self.cmo = self.sirius_rst.cmo
         self.aoproper = "%s/hf_%s.AOPROPER" % (self.subdir, self.mol)
+        self.ao2soint = "%s/hf_%s.AO2SOINT" % (self.subdir, self.mol)
         self.ls = prop.read(*labels, filename=self.aoproper)
         self.symorb = {2:(1,), 3:(1,), 5:(1,)}
 
@@ -42,22 +44,29 @@ class S_Test(unittest.TestCase):
         orbital_indices = get_orbital_indices(self.cmo, {2:(1,), 3:(1,), 5:(1,)})
         self.assertTupleEqual(orbital_indices, (9, 15, 23))
 
-    def test_get_spnorb0(self):
+    def test_get_x1spnorb(self):
         ls = get_ls(self.cmo, self.symorb, self.aoproper)
         numpy.testing.assert_allclose(
             ls[0], [[0,0,0], [0, 0, 0.03385742 ], [0, -0.03385742, 0]]
         )
 
-    def test_get_spnorb1(self):
+    def test_get_y1spnorb(self):
         ls = get_ls(self.cmo, self.symorb, self.aoproper)
         numpy.testing.assert_allclose(
             ls[1], [[0, 0, -0.03385742 ],[0,0,0],  [0.03385742, 0, 0]]
         )
 
-    def test_get_spnorb2(self):
+    def test_get_z1spnorb(self):
         ls = get_ls(self.cmo, self.symorb, self.aoproper)
         numpy.testing.assert_allclose(
             ls[2], [[0, 0.03396038,  0], [-0.03396038,   0, 0], [0,0,0]],
+            rtol=1e-6
+        )
+
+    def test_get_x2spnorb(self):
+        ls2 = get_ls2(self.sirius_rst, self.symorb, self.ao2soint)
+        numpy.testing.assert_allclose(
+            ls2[0], [[0,0,0], [0, 0, -0.00619585 ], [0, 0.00619585, 0]],
             rtol=1e-6
         )
 
