@@ -3,6 +3,7 @@ import mock
 import sys
 import os
 import numpy
+from cStringIO import StringIO
 from two_p_hole import *
 
 sys.path.append(os.path.join(os.environ['HOME'], 'dev/py'))
@@ -37,8 +38,12 @@ class S_Test(unittest.TestCase):
     def test_main(self):
         sys.argv.append("{2: (1,), 3: (1,), 5: (1,)}")
         sys.argv.append(self.dal_tar_gz)
-        print sys.argv
-        main()
+
+        with mock.patch('sys.stdout', new=StringIO()) as mock_stdout:
+            main()
+            saved = mock_stdout.getvalue()
+
+        self.assertEqual(saved, "[-0.03389175 -0.03389175  0.01691156  0.01691156  0.01698019  0.01698019]\n")
 
 class SNosymmetryTest(unittest.TestCase):
 
@@ -63,8 +68,13 @@ class SNosymmetryTest(unittest.TestCase):
     def test_main(self):
         sys.argv.append("{1: (3, 4, 5)}")
         sys.argv.append(self.dal_tar_gz)
-        print sys.argv
-        main()
+
+        with mock.patch('sys.stdout', new=StringIO()) as mock_stdout:
+            main()
+            saved = mock_stdout.getvalue()
+
+        self.assertEqual(saved, "[-0.03389175 -0.03389175  0.01691156  0.01691156  0.01698019  0.01698019]\n")
+
 
 if __name__ == "__main__":
     unittest.main()
