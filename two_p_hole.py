@@ -14,17 +14,23 @@ SO_FACTOR = alpha**2/2
 SO_LABELS = ('X1SPNORB', 'Y1SPNORB', 'Z1SPNORB')
 
 def two_p_eigenvalues(targz, select_orbitals):
-    tgz = tarfile.open(targz, 'r:gz')
-    tgz.extractall(path=tempfile.gettempdir())
+    """
+    Calculate eigenvalues for projected spin-orbit Hamiltonian
+    """
 
-    sirius_rst = os.path.join(tempfile.gettempdir(), 'SIRIUS.RST')
-    aoproper = os.path.join(tempfile.gettempdir(), 'AOPROPER')
+    sirius_rst, aoproper =  \
+        unpack_dalfiles_to_temp(targz, getfiles=['SIRIUS.RST', 'AOPROPER'])
 
     cmo = SiriusRestart(name=sirius_rst).cmo
     ls = get_ls(cmo, select_orbitals, aoproper)
     V = makeV(ls)
     er = get_eigen(V)
     return er
+
+def unpack_dalfiles_to_temp(targz, getfiles=[]):
+    tgz = tarfile.open(targz, 'r:gz')
+    tgz.extractall(path=tempfile.gettempdir())
+    return  (os.path.join(tempfile.gettempdir(), f) for f in getfiles)
     
 
 def get_ls(cmo, symorb, aoproper):
