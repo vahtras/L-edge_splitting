@@ -13,27 +13,33 @@ from dalmisc import twoso
 SO_FACTOR = alpha**2/2
 SO_LABELS = ('X1SPNORB', 'Y1SPNORB', 'Z1SPNORB')
 
-def two_p_eigenvalues(targz, select_orbitals):
+def two_p_eigenvalues(targz, select_orbitals, two_electron=False):
     """
     Calculate eigenvalues for projected spin-orbit Hamiltonian
     """
 
     sirius_rst, aoproper =  \
-        unpack_dalfiles_to_temp(targz, getfiles=['SIRIUS.RST', 'AOPROPER'])
+        unpack_dalfiles(targz, getfiles=['SIRIUS.RST', 'AOPROPER'])
 
-    cmo = SiriusRestart(name=sirius_rst).cmo
-    ls = get_ls(cmo, select_orbitals, aoproper)
+    restart_file = SiriusRestart(name=sirius_rst)
+    cmo = restart_file.cmo
+
+    if two_electron:
+        ao2soint, = unpack_dalfiles(targz, getfiles=['AO2SOINT'])
+        ls = get_ls2(restart_file, select_orbitals, ao2soint)
+    else:
+        ls = get_ls1(cmo, select_orbitals, aoproper)
     V = makeV(ls)
     er = get_eigen(V)
     return er
 
-def unpack_dalfiles_to_temp(targz, getfiles=[]):
+def unpack_dalfiles(targz, getfiles=[]):
     tgz = tarfile.open(targz, 'r:gz')
     tgz.extractall(path=tempfile.gettempdir())
     return  (os.path.join(tempfile.gettempdir(), f) for f in getfiles)
     
 
-def get_ls(cmo, symorb, aoproper):
+def get_ls1(cmo, symorb, aoproper):
     orbitals = get_orbitals(cmo, symorb)
     spin_orbit_matrices = prop.read(*SO_LABELS, filename=aoproper)
     return [SO_FACTOR*orbitals.T*ls*orbitals for ls in spin_orbit_matrices]
@@ -75,11 +81,12 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('orbitals', help='Select orbitals as dict')
     parser.add_argument('daltargz', help='Dalton tar ball')
+    parser.add_argument('--two-electron', action='store_true', help='Only two-electron spin-orbit')
 
     args = parser.parse_args()
 
     exec "orbitals = %s" % args.orbitals
-    print two_p_eigenvalues(args.daltargz, orbitals)
+    print two_p_eigenvalues(args.daltargz, orbitals, two_electron=args.two_electron)
 
 if __name__ == "__main__":
     main()

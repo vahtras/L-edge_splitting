@@ -45,19 +45,19 @@ class S_Test(unittest.TestCase):
         self.assertTupleEqual(orbital_indices, (9, 15, 23))
 
     def test_get_x1spnorb(self):
-        ls = get_ls(self.cmo, self.symorb, self.aoproper)
+        ls = get_ls1(self.cmo, self.symorb, self.aoproper)
         numpy.testing.assert_allclose(
             ls[0], [[0,0,0], [0, 0, 0.03385742 ], [0, -0.03385742, 0]]
         )
 
     def test_get_y1spnorb(self):
-        ls = get_ls(self.cmo, self.symorb, self.aoproper)
+        ls = get_ls1(self.cmo, self.symorb, self.aoproper)
         numpy.testing.assert_allclose(
             ls[1], [[0, 0, -0.03385742 ],[0,0,0],  [0.03385742, 0, 0]]
         )
 
     def test_get_z1spnorb(self):
-        ls = get_ls(self.cmo, self.symorb, self.aoproper)
+        ls = get_ls1(self.cmo, self.symorb, self.aoproper)
         numpy.testing.assert_allclose(
             ls[2], [[0, 0.03396038,  0], [-0.03396038,   0, 0], [0,0,0]],
             rtol=1e-6
@@ -67,6 +67,20 @@ class S_Test(unittest.TestCase):
         ls2 = get_ls2(self.sirius_rst, self.symorb, self.ao2soint)
         numpy.testing.assert_allclose(
             ls2[0], [[0,0,0], [0, 0, -0.00619585 ], [0, 0.00619585, 0]],
+            rtol=1e-6
+        )
+
+    def test_get_y2spnorb(self):
+        ls2 = get_ls2(self.sirius_rst, self.symorb, self.ao2soint)
+        numpy.testing.assert_allclose(
+            ls2[1], [[0, 0, 0.00619585], [0,0,0], [-0.00619585, 0, 0]],
+            rtol=1e-6
+        )
+
+    def test_get_z2spnorb(self):
+        ls2 = get_ls2(self.sirius_rst, self.symorb, self.ao2soint)
+        numpy.testing.assert_allclose(
+            ls2[2], [[0, -0.00616044, 0], [0.00616044, 0, 0], [0,0,0]],
             rtol=1e-6
         )
 
@@ -89,20 +103,20 @@ class S_Test(unittest.TestCase):
             
     @mock.patch('two_p_hole.get_eigen')
     @mock.patch('two_p_hole.makeV')
-    @mock.patch('two_p_hole.get_ls')
+    @mock.patch('two_p_hole.get_ls1')
     @mock.patch('two_p_hole.SiriusRestart')
     @mock.patch('two_p_hole.tarfile.open')
-    def test_untar(self, mock_open, mock_sir, mock_get_ls, mock_makeV, mock_e):
+    def test_untar(self, mock_open, mock_sir, mock_get_ls1, mock_makeV, mock_e):
         two_p_eigenvalues(self.dal_tar_gz, self.symorb)
         mock_open.return_value = mock.Mock()
         mock_open.assert_called_with(self.dal_tar_gz, 'r:gz')
 
     @mock.patch('two_p_hole.get_eigen')
     @mock.patch('two_p_hole.makeV')
-    @mock.patch('two_p_hole.get_ls')
+    @mock.patch('two_p_hole.get_ls1')
     @mock.patch('two_p_hole.SiriusRestart')
     @mock.patch('two_p_hole.tarfile.open')
-    def test_extract(self, mock_open, mock_sir, mock_get_ls, mock_makeV, mock_e):
+    def test_extract(self, mock_open, mock_sir, mock_get_ls1, mock_makeV, mock_e):
         mock_return_object = mock.Mock()
         mock_open.return_value = mock_return_object
         two_p_eigenvalues(self.dal_tar_gz, self.symorb)
