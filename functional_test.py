@@ -112,7 +112,7 @@ class SNoSymmetryTwoElectronTest(unittest.TestCase):
         sys.argv = ['TwoElectronTest']
 
 
-    def test_main(self):
+    def test_main_two(self):
         sys.argv.append("{1: (3, 4, 5)}")
         sys.argv.append(self.dal_tar_gz)
         sys.argv.append('--two-electron')
@@ -122,6 +122,18 @@ class SNoSymmetryTwoElectronTest(unittest.TestCase):
             saved = mock_stdout.getvalue()
 
         self.assertEqual(saved, "[-0.00310383 -0.00310383 -0.00308022 -0.00308022  0.00618405  0.00618405]\n")
+
+    def test_main_all(self):
+        sys.argv.append("{1: (3, 4, 5)}")
+        sys.argv.append(self.dal_tar_gz)
+        sys.argv.append('--all-electron')
+
+        with mock.patch('sys.stdout', new=StringIO()) as mock_stdout:
+            main()
+            saved = mock_stdout.getvalue()
+
+        self.assertEqual(saved, "[-0.02770772 -0.02770772  0.01380775  0.01380775  0.01389997  0.01389997]\n")
+
 
 if __name__ == "__main__":
     unittest.main()

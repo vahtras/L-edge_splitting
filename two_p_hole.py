@@ -13,7 +13,7 @@ from dalmisc import twoso
 SO_FACTOR = alpha**2/2
 SO_LABELS = ('X1SPNORB', 'Y1SPNORB', 'Z1SPNORB')
 
-def two_p_eigenvalues(targz, select_orbitals, two_electron=False):
+def two_p_eigenvalues(targz, select_orbitals, two_electron=False, all_electron=False):
     """
     Calculate eigenvalues for projected spin-orbit Hamiltonian
     """
@@ -27,6 +27,11 @@ def two_p_eigenvalues(targz, select_orbitals, two_electron=False):
     if two_electron:
         ao2soint, = unpack_dalfiles(targz, getfiles=['AO2SOINT'])
         ls = get_ls2(restart_file, select_orbitals, ao2soint)
+    elif all_electron:
+        ao2soint, = unpack_dalfiles(targz, getfiles=['AO2SOINT'])
+        ls1 = get_ls1(cmo, select_orbitals, aoproper)
+        ls2 = get_ls2(restart_file, select_orbitals, ao2soint)
+        ls = [m1 + m2 for m1, m2 in zip(ls1, ls2)]
     else:
         ls = get_ls1(cmo, select_orbitals, aoproper)
     V = makeV(ls)
@@ -82,11 +87,12 @@ def main():
     parser.add_argument('orbitals', help='Select orbitals as dict')
     parser.add_argument('daltargz', help='Dalton tar ball')
     parser.add_argument('--two-electron', action='store_true', help='Only two-electron spin-orbit')
+    parser.add_argument('--all-electron', action='store_true', help='Full Breit-Pauli spin-orbit')
 
     args = parser.parse_args()
 
     exec "orbitals = %s" % args.orbitals
-    print two_p_eigenvalues(args.daltargz, orbitals, two_electron=args.two_electron)
+    print two_p_eigenvalues(args.daltargz, orbitals, two_electron=args.two_electron, all_electron=args.all_electron)
 
 if __name__ == "__main__":
     main()
