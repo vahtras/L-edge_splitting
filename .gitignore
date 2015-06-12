@@ -11,3 +11,4 @@
 *AO*
 *.pyc
 .coverage
+.ipynb_checkpoints
