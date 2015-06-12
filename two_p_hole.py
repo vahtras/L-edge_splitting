@@ -8,7 +8,7 @@ from scipy.constants import alpha
 import numpy
 from daltools import prop
 from dalmisc.sirrst import SiriusRestart
-from dalmisc import twoso
+from two_electron import twoso
 
 SO_FACTOR = alpha**2/2
 SO_LABELS = ('X1SPNORB', 'Y1SPNORB', 'Z1SPNORB')
