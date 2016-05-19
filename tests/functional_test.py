@@ -7,7 +7,7 @@ from cStringIO import StringIO
 from two_p_hole import *
 
 sys.path.append(os.path.join(os.environ['HOME'], 'dev/py'))
-from dalmisc.sirrst import SiriusRestart
+from daltools.sirrst import SiriusRestart
 from daltools import prop
 
 labels = ('X1SPNORB', 'Y1SPNORB', 'Z1SPNORB')

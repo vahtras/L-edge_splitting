@@ -7,8 +7,8 @@ sys.path.append(os.path.join(os.environ['HOME'], 'dev/py'))
 from scipy.constants import alpha
 import numpy
 from daltools import prop
-from dalmisc.sirrst import SiriusRestart
-from two_electron import twoso
+from daltools.sirrst import SiriusRestart
+from two import twoso
 
 SO_FACTOR = alpha**2/2
 SO_LABELS = ('X1SPNORB', 'Y1SPNORB', 'Z1SPNORB')
