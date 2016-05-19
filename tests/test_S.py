@@ -14,7 +14,7 @@ labels = ('X1SPNORB', 'Y1SPNORB', 'Z1SPNORB')
 class S_Test(unittest.TestCase):
 
     def setUp(self):
-        self.subdir = 'S'
+        self.subdir = 'tests/S'
         self.mol = 'S'
         self.dal_tar_gz = "%s/hf_%s.tar.gz" % (self.subdir, self.mol)
         restart_file = "%s/hf_%s.SIRIUS.RST" % (self.subdir, self.mol)
@@ -127,7 +127,7 @@ class S_Test(unittest.TestCase):
 class S_NosymmetryTest(unittest.TestCase):
 
     def setUp(self):
-        self.subdir = 'S_nosym'
+        self.subdir = 'tests/S_nosym'
         self.mol = 'S'
         self.dal_tar_gz = "%s/hf_%s.tar.gz" % (self.subdir, self.mol)
         sirius_rst = "%s/hf_%s.SIRIUS.RST" % (self.subdir, self.mol)
@@ -144,7 +144,7 @@ class S_NosymmetryTest(unittest.TestCase):
 
     def test_get_2p_orbitals(self):
         p_orbitals = get_orbitals(self.cmo, {1: (3, 4, 5)})
-        ref = numpy.loadtxt('S_nosym/p345.txt')
+        ref = numpy.loadtxt('tests/S_nosym/p345.txt')
         
         numpy.testing.assert_allclose(p_orbitals, ref, atol=1e-4)
 

@@ -15,7 +15,7 @@ labels = ('X1SPNORB', 'Y1SPNORB', 'Z1SPNORB')
 class S_Test(unittest.TestCase):
 
     def setUp(self):
-        self.subdir = 'S'
+        self.subdir = 'tests/S'
         self.mol = 'S'
         self.dal_tar_gz = "%s/hf_%s.tar.gz" % (self.subdir, self.mol)
         self.symorb = {2:(1,), 3:(1,), 5:(1,)}
@@ -48,7 +48,7 @@ class S_Test(unittest.TestCase):
 class STwoElectronTest(unittest.TestCase):
 
     def setUp(self):
-        self.subdir = 'S'
+        self.subdir = 'tests/S'
         self.mol = 'S'
         self.dal_tar_gz = "%s/hf_%s.tar.gz" % (self.subdir, self.mol)
         self.symorb = {2:(1,), 3:(1,), 5:(1,)}
@@ -72,7 +72,7 @@ class STwoElectronTest(unittest.TestCase):
 class SNosymmetryTest(unittest.TestCase):
 
     def setUp(self):
-        self.subdir = 'S_nosym'
+        self.subdir = 'tests/S_nosym'
         self.mol = 'S'
         self.dal_tar_gz = "%s/hf_%s.tar.gz" % (self.subdir, self.mol)
         self.symorb = {1: (3, 4, 5)}
@@ -102,7 +102,7 @@ class SNosymmetryTest(unittest.TestCase):
 class SNoSymmetryTwoElectronTest(unittest.TestCase):
 
     def setUp(self):
-        self.subdir = 'S_nosym'
+        self.subdir = 'tests/S_nosym'
         self.mol = 'S'
         self.dal_tar_gz = "%s/hf_%s.tar.gz" % (self.subdir, self.mol)
         self.symorb = {1: (3, 4, 5)}
