@@ -4,7 +4,7 @@ import sys
 import os
 import numpy
 from cStringIO import StringIO
-from two_p_hole import *
+from ledges.two_p_hole import *
 
 sys.path.append(os.path.join(os.environ['HOME'], 'dev/py'))
 from daltools.sirrst import SiriusRestart

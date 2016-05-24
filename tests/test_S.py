@@ -3,7 +3,7 @@ import mock
 import sys
 import os
 import numpy
-from two_p_hole import *
+from ledges.two_p_hole import *
 
 sys.path.append(os.path.join(os.environ['HOME'], 'dev/py'))
 from daltools.sirrst import SiriusRestart
@@ -101,21 +101,21 @@ class S_Test(unittest.TestCase):
             [-0.5, 0.5]
         )
             
-    @mock.patch('two_p_hole.get_eigen')
-    @mock.patch('two_p_hole.makeV')
-    @mock.patch('two_p_hole.get_ls1')
-    @mock.patch('two_p_hole.SiriusRestart')
-    @mock.patch('two_p_hole.tarfile.open')
+    @mock.patch('ledges.two_p_hole.get_eigen')
+    @mock.patch('ledges.two_p_hole.makeV')
+    @mock.patch('ledges.two_p_hole.get_ls1')
+    @mock.patch('ledges.two_p_hole.SiriusRestart')
+    @mock.patch('ledges.two_p_hole.tarfile.open')
     def test_untar(self, mock_open, mock_sir, mock_get_ls1, mock_makeV, mock_e):
         two_p_eigenvalues(self.dal_tar_gz, self.symorb)
         mock_open.return_value = mock.Mock()
         mock_open.assert_called_with(self.dal_tar_gz, 'r:gz')
 
-    @mock.patch('two_p_hole.get_eigen')
-    @mock.patch('two_p_hole.makeV')
-    @mock.patch('two_p_hole.get_ls1')
-    @mock.patch('two_p_hole.SiriusRestart')
-    @mock.patch('two_p_hole.tarfile.open')
+    @mock.patch('ledges.two_p_hole.get_eigen')
+    @mock.patch('ledges.two_p_hole.makeV')
+    @mock.patch('ledges.two_p_hole.get_ls1')
+    @mock.patch('ledges.two_p_hole.SiriusRestart')
+    @mock.patch('ledges.two_p_hole.tarfile.open')
     def test_extract(self, mock_open, mock_sir, mock_get_ls1, mock_makeV, mock_e):
         mock_return_object = mock.Mock()
         mock_open.return_value = mock_return_object
