@@ -11,6 +11,7 @@ from . import ledges
 #from ledges import tdm
 
 SO_FACTOR = alpha**2/2
+TOL = {'rtol': 1e-7, 'atol': 1e-7}
 
 class TDMTest(unittest.TestCase):
     """Repreduce results for S_nosymm calculation with VB method"""
@@ -60,7 +61,7 @@ class TDMTest(unittest.TestCase):
         numpy.testing.assert_allclose(
             v_aa,
             [[ 0, 0.01692871j, 0],[-0.01692871j, 0, 0], [0, 0, 0]],
-            rtol=1e-7, atol=1e-7
+            **TOL
             )
 
     def test_v_ab(self):
@@ -77,7 +78,7 @@ class TDMTest(unittest.TestCase):
                 [-0.01692871 + 0.00000025153834j, -0.00000025153834-0.01698019j, 0]
             ]
             )
-        numpy.testing.assert_allclose(v_ab, v_ab_ref, rtol=1e-7, atol=1e-7)
+        numpy.testing.assert_allclose(v_ab, v_ab_ref, **TOL)
 
     def test_v_ba(self):
         v_ba = numpy.ndarray((3, 3), dtype=numpy.complex64)
@@ -94,6 +95,10 @@ class TDMTest(unittest.TestCase):
             ]
             )
         numpy.testing.assert_allclose(v_ba, v_ba_ref, rtol=1e-7, atol=1e-7)
+
+    def test_state_overlap(self):
+        state_overlap = ledges.tdm.get_state_overlap(*self.p)
+        numpy.testing.assert_allclose(state_overlap, numpy.eye(3), **TOL)
 
 
 
