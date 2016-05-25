@@ -16,3 +16,7 @@
 .cache
 *.pdf
 venv*
+htmlcov
+dist
+src
+*.egg-info
