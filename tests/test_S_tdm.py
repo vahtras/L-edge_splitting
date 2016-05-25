@@ -1,3 +1,4 @@
+"""Test general TDM version using reference values from the MO version"""
 import unittest
 import os
 import numpy
@@ -5,6 +6,7 @@ from scipy.constants import alpha
 import vb.nod
 import daltools
 import util
+from util.full import matrix
 from . import ledges
 #from ledges import tdm
 
@@ -30,7 +32,8 @@ class TDMTest(unittest.TestCase):
         self.p_y = vb.nod.Nod(
             [0, 1, 2, 3, 4, 5, 6, 7, 8],
             [0, 1, 2, 4, 5, 6, 7, 8],
-            C=cmo
+            C=-cmo # The change of sign is from odd permutations to reach the
+                   # the hole orbital 3, compared to the mo implementation
             )
         self.p_z = vb.nod.Nod(
             [0, 1, 2, 3, 4, 5, 6, 7, 8],
@@ -52,13 +55,45 @@ class TDMTest(unittest.TestCase):
         v_aa = numpy.ndarray((3, 3), dtype=numpy.complex64)
         for i in range(3):
             for j in range(3):
-                v_aa[i, j] = self.so1[2] & self.spin_density.subblock[i][j]
-        v_aa *= SO_FACTOR
+                v_aa[i, j] = self.so1[2] & self.spin_density[i, j]
+        v_aa *= -SO_FACTOR*1j
         numpy.testing.assert_allclose(
             v_aa,
-            [[ 0, 0.01692871, 0],[-0.01692871, 0, 0], [0, 0, 0]],
+            [[ 0, 0.01692871j, 0],[-0.01692871j, 0, 0], [0, 0, 0]],
             rtol=1e-7, atol=1e-7
             )
+
+    def test_v_ab(self):
+        v_ab = numpy.ndarray((3, 3), dtype=numpy.complex64)
+        for i in range(3):
+            for j in range(3):
+                v_ab[i, j] = (self.so1[0] + 1j*self.so1[1]) & \
+                    self.spin_density[i, j]
+        v_ab *= -SO_FACTOR*1j
+        v_ab_ref = numpy.array(
+            [
+                [0, 0, 0.01692871 - 0.00000025153834j],
+                [0, 0, 0.00000025153834 + 0.01698019j],
+                [-0.01692871 + 0.00000025153834j, -0.00000025153834-0.01698019j, 0]
+            ]
+            )
+        numpy.testing.assert_allclose(v_ab, v_ab_ref, rtol=1e-7, atol=1e-7)
+
+    def test_v_ba(self):
+        v_ba = numpy.ndarray((3, 3), dtype=numpy.complex64)
+        for i in range(3):
+            for j in range(3):
+                v_ba[i, j] = (self.so1[0] - 1j*self.so1[1]) & \
+                    self.spin_density[i, j]
+        v_ba *= -SO_FACTOR*1j
+        v_ba_ref = numpy.array(
+            [
+                [0, 0, -0.01692871 - 0.00000025153834j],
+                [0, 0, -0.00000025153834 + 0.01698019j],
+                [0.01692871 + 0.00000025153834j, 0.00000025153834-0.01698019j, 0]
+            ]
+            )
+        numpy.testing.assert_allclose(v_ba, v_ba_ref, rtol=1e-7, atol=1e-7)
 
 
 
