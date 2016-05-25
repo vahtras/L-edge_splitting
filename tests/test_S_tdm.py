@@ -4,6 +4,8 @@ from scipy.constants import alpha
 import vb.nod
 import daltools
 import util
+from . import ledges
+#from ledges import tdm
 
 SO_FACTOR = alpha**2/2
 
@@ -40,12 +42,7 @@ class TDMTest(unittest.TestCase):
             filename=fpath("hf_S.AOPROPER")
             )
 
-        nb = self.so1[0].shape[0]
-        self.spin_density = util.subblocked.matrix([nb, nb, nb], [nb, nb, nb])
-        for i, p_i in enumerate(self.p):
-            for j, p_j in enumerate(self.p):
-                da_ij, db_ij = vb.nod.ao_transition_matrix(p_i, p_j)
-                self.spin_density.subblock[i][j] = (da_ij - db_ij)/2
+        self.spin_density = ledges.tdm.get_transition_spin_densities(*self.p)
 
     def tearDown(self):
         pass
