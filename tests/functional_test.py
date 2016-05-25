@@ -3,10 +3,12 @@ import mock
 import sys
 import os
 import numpy
-from cStringIO import StringIO
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
 from ledges.two_p_hole import *
 
-sys.path.append(os.path.join(os.environ['HOME'], 'dev/py'))
 from daltools.sirrst import SiriusRestart
 from daltools import prop
 

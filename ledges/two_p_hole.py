@@ -91,8 +91,11 @@ def main():
 
     args = parser.parse_args()
 
-    exec "orbitals = %s" % args.orbitals
-    print two_p_eigenvalues(args.daltargz, orbitals, two_electron=args.two_electron, all_electron=args.all_electron)
+    ns = {}
+    #exec "orbitals = %s" % args.orbitals in ns
+    exec("orbitals = %s" % args.orbitals, ns)
+    print(two_p_eigenvalues(args.daltargz, ns['orbitals'],
+        two_electron=args.two_electron, all_electron=args.all_electron))
 
 if __name__ == "__main__":
     main()
