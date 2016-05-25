@@ -1,0 +1,6 @@
+#!/usr/bin/env python
+import argparse
+from ledges.two_p_hole import main
+
+if __name__ == "__main__":
+    main()
