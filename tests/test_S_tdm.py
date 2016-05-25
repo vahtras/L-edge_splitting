@@ -1,5 +1,6 @@
 import unittest
 import os
+import numpy
 from scipy.constants import alpha
 import vb.nod
 import daltools
@@ -47,59 +48,18 @@ class TDMTest(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_v_xaxa(self):
-        """verify alpha-alpha block"""
-        d_xx = vb.nod.Dao(self.p_x, self.p_x)
-        v_xaxa = SO_FACTOR*self.so1[2] & self.spin_density.subblock[0][0]
-        self.assertAlmostEqual(v_xaxa, 0)
+    def test_v_aa(self):
+        v_aa = numpy.ndarray((3, 3), dtype=numpy.complex64)
+        for i in range(3):
+            for j in range(3):
+                v_aa[i, j] = self.so1[2] & self.spin_density.subblock[i][j]
+        v_aa *= SO_FACTOR
+        numpy.testing.assert_allclose(
+            v_aa,
+            [[ 0, 0.01692871, 0],[-0.01692871, 0, 0], [0, 0, 0]],
+            rtol=1e-7, atol=1e-7
+            )
 
-    def test_v_xaya(self):
-        """verify alpha-alpha block"""
-        d_xy = vb.nod.ao_transition_matrix(self.p_x, self.p_y)
-        v_xaya = SO_FACTOR*self.so1[2] & self.spin_density.subblock[0][1]
-        self.assertAlmostEqual(v_xaya, 0.01692871)
-
-    def test_v_xaza(self):
-        """verify alpha-alpha block"""
-        d_xz = vb.nod.ao_transition_matrix(self.p_x, self.p_z)
-        v_xaza = SO_FACTOR*self.so1[2] & self.spin_density.subblock[0][2]
-        self.assertAlmostEqual(v_xaza, 0.0)
-
-    def test_v_yaxa(self):
-        """verify alpha-alpha block"""
-        d_yx = vb.nod.ao_transition_matrix(self.p_y, self.p_x)
-        v_yaxa = SO_FACTOR*self.so1[2] & self.spin_density.subblock[1][0]
-        self.assertAlmostEqual(v_yaxa, -0.01692871)
-
-    def test_v_yaya(self):
-        """verify alpha-alpha block"""
-        d_yy = vb.nod.ao_transition_matrix(self.p_y, self.p_y)
-        v_yaya = SO_FACTOR*self.so1[2] & self.spin_density.subblock[1][1]
-        self.assertAlmostEqual(v_yaya, 0.0)
-
-    def test_v_yaza(self):
-        """verify alpha-alpha block"""
-        d_yz = vb.nod.ao_transition_matrix(self.p_y, self.p_z)
-        v_yaza = SO_FACTOR*self.so1[2] & self.spin_density.subblock[1][2]
-        self.assertAlmostEqual(v_yaza, 0.0)
-
-    def test_v_zaxa(self):
-        """verify alpha-alpha block"""
-        d_zx = vb.nod.ao_transition_matrix(self.p_z, self.p_x)
-        v_zaxa = SO_FACTOR*self.so1[2] & self.spin_density.subblock[2][0]
-        self.assertAlmostEqual(v_zaxa, 0.0)
-
-    def test_v_zaya(self):
-        """verify alpha-alpha block"""
-        d_zy = vb.nod.ao_transition_matrix(self.p_z, self.p_y)
-        v_zaya = SO_FACTOR*self.so1[2] & self.spin_density.subblock[2][1]
-        self.assertAlmostEqual(v_zaya, 0.0)
-
-    def test_v_zaza(self):
-        """verify alpha-alpha block"""
-        d_zz = vb.nod.ao_transition_matrix(self.p_z, self.p_z)
-        v_zaza = SO_FACTOR*self.so1[2] & self.spin_density.subblock[2][2]
-        self.assertAlmostEqual(v_zaza, 0.0)
 
 
 
