@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import sys
 import numpy
 from scipy.constants import physical_constants as pc

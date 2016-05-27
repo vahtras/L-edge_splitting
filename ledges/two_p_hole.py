@@ -88,14 +88,21 @@ def main():
     parser.add_argument('daltargz', help='Dalton tar ball')
     parser.add_argument('--two-electron', action='store_true', help='Only two-electron spin-orbit')
     parser.add_argument('--all-electron', action='store_true', help='Full Breit-Pauli spin-orbit')
+    parser.add_argument('--output', default=None, help='output')
 
     args = parser.parse_args()
 
     ns = {}
-    #exec "orbitals = %s" % args.orbitals in ns
     exec("orbitals = %s" % args.orbitals, ns)
-    print(two_p_eigenvalues(args.daltargz, ns['orbitals'],
-        two_electron=args.two_electron, all_electron=args.all_electron))
+
+    tpe  = two_p_eigenvalues(
+        args.daltargz, ns['orbitals'],
+        two_electron=args.two_electron,
+        all_electron=args.all_electron,
+        )
+    print(tpe)
+    if args.output:
+        numpy.savetxt(args.output, tpe, fmt="%20.14f")
 
 if __name__ == "__main__":
     main()
