@@ -6,7 +6,6 @@ setup(name="Ledger",
     scripts=[
         'scripts/ledges',
         'scripts/generate_spectrum.sh',
-        'scripts/peaksplit24.py',
         'scripts/justplot2.py'
         ],
     author="Olav Vahtras",
