@@ -13,7 +13,8 @@ from two import twoso
 SO_FACTOR = alpha**2/2
 SO_LABELS = ('X1SPNORB', 'Y1SPNORB', 'Z1SPNORB')
 
-def two_p_eigenvalues(targz, select_orbitals, two_electron=False, all_electron=False):
+def two_p_eigenvalues(targz, select_orbitals, two_electron=False,
+        all_electron=False, reference_occupation=None):
     """
     Calculate eigenvalues for projected spin-orbit Hamiltonian
     """
@@ -49,12 +50,16 @@ def get_ls1(cmo, symorb, aoproper):
     spin_orbit_matrices = prop.read(*SO_LABELS, filename=aoproper)
     return [SO_FACTOR*orbitals.T*ls*orbitals for ls in spin_orbit_matrices]
 
-def get_ls2(sirius_rst, symorb, ao2soint):
-    rhf_density  = sirius_rst.get_rhf_density()
+def get_ls2(sirius_rst, symorb, ao2soint, reference_occupation=None):
+    if reference_occupation is not None:
+        rhf_density = sirius.get_dens_from_occnum(reference_occupation)
+    else:
+        rhf_density  = sirius_rst.get_rhf_density()
     #where comes the density from, i.e. nocc.
     orbitals = get_orbitals(sirius_rst.cmo, symorb)
     spin_orbit_matrices = [twoso.fock(rhf_density, c, filename=ao2soint) for c in "xyz"]
     return [SO_FACTOR*orbitals.T*ls2*orbitals for ls2 in spin_orbit_matrices]
+cc=None
 
 def get_orbitals(cmo, symorb):
     indices = get_orbital_indices(cmo, symorb)
@@ -89,16 +94,19 @@ def main():
     parser.add_argument('--two-electron', action='store_true', help='Only two-electron spin-orbit')
     parser.add_argument('--all-electron', action='store_true', help='Full Breit-Pauli spin-orbit')
     parser.add_argument('--output', default=None, help='output')
+    parser.add_argument('--reference-occupation', default=None, help='Specify reference occupation')
 
     args = parser.parse_args()
 
     ns = {}
     exec("orbitals = %s" % args.orbitals, ns)
+    exec("refocc = %s" % args.reference_occupation)
 
     tpe  = two_p_eigenvalues(
         args.daltargz, ns['orbitals'],
         two_electron=args.two_electron,
         all_electron=args.all_electron,
+        reference_occupation=refocc
         )
     print(tpe)
     if args.output:
