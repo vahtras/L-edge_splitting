@@ -14,9 +14,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-from scipy.constants import physical_constants as pc
-eV = pc['Hartree energy in eV'][0]
-cm = pc['hartree-inverse meter relationship'][0]/100
+from .constants import CM
 
 SO_FACTOR = alpha**2/2
 SO_LABELS = ('X1SPNORB', 'Y1SPNORB', 'Z1SPNORB')
@@ -82,7 +80,7 @@ def get_orbital_indices(cmo, symorb):
 
     
 def makeV(ls):
-    logger.debug("ls = \n %s %s %s" % (ls[0]*cm/2, ls[1]*cm/2, ls[2]*cm/2))
+    logger.debug("ls = \n %s %s %s" % (ls[0]*CM/2, ls[1]*CM/2, ls[2]*CM/2))
     V = numpy.zeros((6, 6), dtype='complex', order='F')
     V[:3, :3] = ls[2]
     V[3:, 3:] = -ls[2]
