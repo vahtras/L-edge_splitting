@@ -3,8 +3,6 @@ import sys
 import os
 import tarfile
 import tempfile
-sys.path.append(os.path.join(os.environ['HOME'], 'dev/py'))
-from scipy.constants import alpha
 import numpy
 from daltools import prop
 from daltools.sirrst import SiriusRestart
@@ -14,9 +12,9 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-from .constants import CM
+from .constants import CM, ALPHA
 
-SO_FACTOR = alpha**2/2
+SO_FACTOR = ALPHA**2/2
 SO_LABELS = ('X1SPNORB', 'Y1SPNORB', 'Z1SPNORB')
 
 def two_p_eigenvalues(targz, select_orbitals, two_electron=False,

@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 import sys
 import numpy
-from scipy.constants import physical_constants as pc
-eV = pc['Hartree energy in eV'][0]
-cm = pc['hartree-inverse meter relationship'][0]/100
+from .constants import CM, EV
 
 def mean(n1, n2, filename):
     eigenvalues = numpy.loadtxt(filename)
@@ -30,10 +28,10 @@ def main():
 
     if args.eV:
         unit  = "eV"
-        conv = eV
+        conv = EV
     elif args.cm:
         unit  = "cm"
-        conv = cm 
+        conv = CM 
     else:
         unit = "a.u"
         conv = 1
