@@ -1,5 +1,7 @@
 test:
 	python -m nose -x
+pytest:
+	python -m pytest -x tests
 debug:
 	python -m nose -vx --pdb
 coverage:

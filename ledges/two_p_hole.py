@@ -10,6 +10,17 @@ from daltools import prop
 from daltools.sirrst import SiriusRestart
 from two import twoso
 
+import logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+hsohandler = logging.FileHandler('hso.log')
+hsohandler.setLevel(logging.DEBUG)
+logger.addHandler(hsohandler)
+
+from scipy.constants import physical_constants as pc
+eV = pc['Hartree energy in eV'][0]
+cm = pc['hartree-inverse meter relationship'][0]/100
+
 SO_FACTOR = alpha**2/2
 SO_LABELS = ('X1SPNORB', 'Y1SPNORB', 'Z1SPNORB')
 
@@ -27,11 +38,13 @@ def two_p_eigenvalues(targz, select_orbitals, two_electron=False,
 
     if two_electron:
         ao2soint, = unpack_dalfiles(targz, getfiles=['AO2SOINT'])
-        ls = get_ls2(restart_file, select_orbitals, ao2soint)
+        ls = get_ls2(restart_file, select_orbitals, ao2soint,
+            reference_occupation=reference_occupation)
     elif all_electron:
         ao2soint, = unpack_dalfiles(targz, getfiles=['AO2SOINT'])
         ls1 = get_ls1(cmo, select_orbitals, aoproper)
-        ls2 = get_ls2(restart_file, select_orbitals, ao2soint)
+        ls2 = get_ls2(restart_file, select_orbitals, ao2soint,
+            reference_occupation=reference_occupation)
         ls = [m1 + m2 for m1, m2 in zip(ls1, ls2)]
     else:
         ls = get_ls1(cmo, select_orbitals, aoproper)
@@ -52,7 +65,7 @@ def get_ls1(cmo, symorb, aoproper):
 
 def get_ls2(sirius_rst, symorb, ao2soint, reference_occupation=None):
     if reference_occupation is not None:
-        rhf_density = sirius.get_dens_from_occnum(reference_occupation)
+        rhf_density = sirius_rst.get_occ_density(reference_occupation)
     else:
         rhf_density  = sirius_rst.get_rhf_density()
     #where comes the density from, i.e. nocc.
@@ -72,6 +85,7 @@ def get_orbital_indices(cmo, symorb):
 
     
 def makeV(ls):
+    logger.debug("ls = \n %s %s %s" % (ls[0]*cm/2, ls[1]*cm/2, ls[2]*cm/2))
     V = numpy.zeros((6, 6), dtype='complex', order='F')
     V[:3, :3] = ls[2]
     V[3:, 3:] = -ls[2]
