@@ -11,11 +11,8 @@ from daltools.sirrst import SiriusRestart
 from two import twoso
 
 import logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-hsohandler = logging.FileHandler('hso.log')
-hsohandler.setLevel(logging.DEBUG)
-logger.addHandler(hsohandler)
 
 from scipy.constants import physical_constants as pc
 eV = pc['Hartree energy in eV'][0]

@@ -1,0 +1,32 @@
+#!/bin/bash
+orbitals="{2: (2,), 3: (2,), 5: (2,)}"
+refocc="((2, 2, 2), (2, 2), (2, 2), (), (2, 2), (), (), ())"
+dal=${1-lr}
+mol=${2-Cl}
+calc=${dal}_${mol}
+tgz=$calc.tar.gz
+if [ -f $tgz ]; then
+    echo "Using $tgz"
+else
+    dalton -get 'AOPROPER AO2SOINT' -f mc_$mol $dal $mol
+fi
+
+ledges "$orbitals" $tgz  --output $calc.hso1
+ledges "$orbitals" --two-electron $tgz  --output $calc.hso2 \
+    --reference-occupation="$refocc"
+ledges "$orbitals" --all-electron $tgz  --output $calc.hso \
+    --reference-occupation="$refocc"
+
+#width=.002 generate_spectrum.sh $calc.hso{,[12]}
+
+split1_cm=$(python -m ledges.peaksplit 2 4 $calc.hso1 --cm --fmt '%6.2f')
+split2_cm=$(python -m ledges.peaksplit 4 2 $calc.hso2 --cm --fmt '%6.2f')
+split_cm=$(python -m ledges.peaksplit 2 4 $calc.hso --cm --fmt '%6.2f')
+echo $split1_cm
+echo $split2_cm
+echo $split_cm
+
+
+#justplot2.py $calc.hso{,[12]}.dat --loc "upper left" --legends "BP $split" "1el $split1" "2el $split2" --title "Clorine 3p splitting"
+
+grep SPNORB.*cm-1 ${dal}_${mol}.out

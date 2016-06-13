@@ -1,0 +1,29 @@
+This is the valence splitting/ basically 3p interaction matrix, orbitals 7 8 9
+With the closed shell 2phole formula this holds with out modification
+
+Note:
+@ Spin-orbit coupling constant (Z1SPNORB) :  -333.97941     cm-1
+@ Spin-orbit coupling constant (Z2SPNORB) :   61.733721     cm-1
+@ Spin-orbit coupling constant (Z SPNORB) :  -272.24569     cm-1
+
+Matches Nicklass on the spot as the splitting is propotional to the matrix
+elelment dE = 3 <px |Hsoz |py> = 816.74 cm-1
+
+Here
+$ pycal 272.24569*3
+816.7370700000001
+
+
+This should be reproduced by the script, same integrals and all...
+
+$ ./run_sym
+Using lr_Cl.tar.gz
+DEBUG:ledges.two_p_hole:ls = 
+[-0.00304344 -0.00304344  0.00152172  0.00152172  0.00152172  0.00152172]
+[-0.00028128 -0.00028128 -0.00028128 -0.00028128  0.00056256  0.00056256]
+[-0.00248089 -0.00248089  0.00124044  0.00124044  0.00124044  0.00124044]
+1001.94 cm
+185.20 cm
+816.74 cm
+
+OK
