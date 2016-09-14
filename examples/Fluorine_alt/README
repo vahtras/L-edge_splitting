@@ -1,0 +1,8 @@
+Here we need three separate hole states but to reproduce the same results as
+above
+
+
+mc : optimize scf state
+
+cix, ciy, ciz represent three hole states
+
