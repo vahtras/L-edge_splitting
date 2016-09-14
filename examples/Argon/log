@@ -1,0 +1,127 @@
+DALTON_TMPDIR not defined by user.
+ Guessing /tmp is appropriate scratch directory, and DALTON_TMPDIR is set to this directory
+Fatal error: Input file[s] not specified
+Your command was: /home/olav/dev/daltonprogram/dalton/build/master/dalton -get AOPROPER AO2SOINT
+
+Usage: /home/olav/dev/daltonprogram/dalton/build/master/dalton [options] dalinp{.dal} [molinp{.mol} [potinp{.pot}] [pcmsolver{.pcm}]]
+
+Options:
+ -b dir           : prepend dir to directory list for basis set searches
+                    (current directory and dalton basis library are included
+                     automatically)
+ -w dir           : change WRKDIR to dir
+                    (default: /home/olav/dev/py/L-edge_splitting/examples/Argon)
+ -o file          : redirect output from program to WRKDIR with "file" as file name
+ -ow              : redirect output from program to WRKDIR with standard file name
+ -dal file        : the dalton input file
+ -mol file        : the molecule input file
+ -pot file        : the potential input file (for .QM3, .QMMM and .PEQM)
+ -pcm file        : the pcm input file
+ -ext log         : change output extension from ".out" to ".log"
+ -nobackup        : do not backup files, simply overwrite outputs
+ -f dal_mol[_pot] : extract dal_mol[_pot].tar.gz archive from WRKDIR into
+                    DALTON_TMPDIR before calculation starts
+ -noarch          : do not create tar.gz archive
+ -t dir           : set scratch directory DALTON_TMPDIR; this script will append
+                    '/DALTON_scratch_olav' to the path unless the path
+                    contains 'DALTON_scratch' or you explicitly set -noappend
+ -d               : delete job scratch directory before calculation starts
+ -D               : do not delete job scratch directory after calculation stops
+ -noappend        : do not append anything to the scratch directory; be careful
+                    with this option since by default scratch is wiped after
+                    calculation
+ -get "file1 ..." : get files back from DALTON_TMPDIR after calculation stops
+ -put "file1 ..." : put files to DALTON_TMPDIR before calculation starts
+ -omp num         : set the number of OpenMP threads. Note that Dalton is not OpenMP
+                    parallelized, however, this option can be used with e.g. threaded MKL
+ -N num           : use num MPI processes
+                    (defaults to 1 or DALTON_NUM_MPI_PROCS if defined)
+ -cpexe           : copy dalton.x to DALTON_TMPDIR before execution, either to
+                    global scratch (if DALTON_USE_GLOBAL_SCRATCH is set) or to
+                    local scratch on all nodes
+ -rsh             : use rsh/rcp for communication with MPI nodes
+                    (default: ssh/scp)
+ -nodelist "node1 ..." : set nodelist DALTON_NODELIST, dalton.x will be copied to
+                         DALTON_TMPDIR on each node unless DALTON_USE_GLOBAL_SCRATCH
+                         is defined (the script uses PBS_NODEFILE or SLURM_NODELIST
+                         if available)
+ -x dalmol1 dalmol2 : calculate NEXAFS spectrum from ground and core hole states
+ -exe exec        : change the executable from default (/home/olav/dev/daltonprogram/dalton/build/master/dalton.x) to exec
+ -pg              : do profiling with gprof
+ -mb mem          : set dalton max usable work memory to mem Megabytes
+ -mw mem          : set dalton max usable work memory to mem double precision words
+ -nb mem          : set node max usable work memory to mem Megabytes
+ -nw mem          : set node max usable work memory to mem double precision words
+
+Environment variables understood by the /home/olav/dev/daltonprogram/dalton/build/master/dalton script:
+    DALTON_TMPDIR             : scratch directory
+    DALTON_USE_GLOBAL_SCRATCH : use global scratch directory, do not copy any files to worker nodes
+    DALTON_NODELIST           : list of nodes, dalton.x will be copied to DALTON_TMPDIR on each node
+                                unless DALTON_USE_GLOBAL_SCRATCH is defined
+    DALTON_LAUNCHER           : launcher for the dalton.x binary
+usage: ledges [-h] [--two-electron] [--all-electron] [--output OUTPUT]
+              orbitals daltargz
+ledges: error: too few arguments
+usage: ledges [-h] [--two-electron] [--all-electron] [--output OUTPUT]
+              orbitals daltargz
+ledges: error: too few arguments
+usage: ledges [-h] [--two-electron] [--all-electron] [--output OUTPUT]
+              orbitals daltargz
+ledges: error: too few arguments
+cat: _.hso: No such file or directory
+usage: gaussian.py [-h] [--common-height COMMON_HEIGHT]
+                   [--common-width COMMON_WIDTH] [--step STEP]
+                   [--output OUTPUT] [--shift SHIFT]
+                   centers [centers ...]
+gaussian.py: error: too few arguments
+cat: '_.hso[12]': No such file or directory
+usage: gaussian.py [-h] [--common-height COMMON_HEIGHT]
+                   [--common-width COMMON_WIDTH] [--step STEP]
+                   [--output OUTPUT] [--shift SHIFT]
+                   centers [centers ...]
+gaussian.py: error: too few arguments
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/runpy.py", line 174, in _run_module_as_main
+    "__main__", fname, loader, pkg_name)
+  File "/usr/lib/python2.7/runpy.py", line 72, in _run_code
+    exec code in run_globals
+  File "build/bdist.linux-x86_64/egg/ledges/peaksplit.py", line 37, in <module>
+  File "build/bdist.linux-x86_64/egg/ledges/peaksplit.py", line 33, in main
+  File "build/bdist.linux-x86_64/egg/ledges/peaksplit.py", line 8, in mean
+  File "/home/olav/dev/py/L-edge_splitting/venv/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 803, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: '_.hso'
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/runpy.py", line 174, in _run_module_as_main
+    "__main__", fname, loader, pkg_name)
+  File "/usr/lib/python2.7/runpy.py", line 72, in _run_code
+    exec code in run_globals
+  File "build/bdist.linux-x86_64/egg/ledges/peaksplit.py", line 37, in <module>
+  File "build/bdist.linux-x86_64/egg/ledges/peaksplit.py", line 33, in main
+  File "build/bdist.linux-x86_64/egg/ledges/peaksplit.py", line 8, in mean
+  File "/home/olav/dev/py/L-edge_splitting/venv/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 803, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: '_.hso1'
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/runpy.py", line 174, in _run_module_as_main
+    "__main__", fname, loader, pkg_name)
+  File "/usr/lib/python2.7/runpy.py", line 72, in _run_code
+    exec code in run_globals
+  File "build/bdist.linux-x86_64/egg/ledges/peaksplit.py", line 37, in <module>
+  File "build/bdist.linux-x86_64/egg/ledges/peaksplit.py", line 33, in main
+  File "build/bdist.linux-x86_64/egg/ledges/peaksplit.py", line 8, in mean
+  File "/home/olav/dev/py/L-edge_splitting/venv/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 803, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: '_.hso2'
+Traceback (most recent call last):
+  File "/home/olav/dev/py/L-edge_splitting/venv/bin/justplot2.py", line 4, in <module>
+    __import__('pkg_resources').run_script('Ledger==0.1', 'justplot2.py')
+  File "/home/olav/dev/py/L-edge_splitting/venv/local/lib/python2.7/site-packages/pkg_resources/__init__.py", line 719, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/home/olav/dev/py/L-edge_splitting/venv/local/lib/python2.7/site-packages/pkg_resources/__init__.py", line 1511, in run_script
+    exec(script_code, namespace, namespace)
+  File "/home/olav/dev/py/L-edge_splitting/venv/local/lib/python2.7/site-packages/Ledger-0.1-py2.7.egg/EGG-INFO/scripts/justplot2.py", line 81, in <module>
+    
+  File "/home/olav/dev/py/L-edge_splitting/venv/local/lib/python2.7/site-packages/Ledger-0.1-py2.7.egg/EGG-INFO/scripts/justplot2.py", line 32, in main
+    
+AssertionError: Different number of files/legends

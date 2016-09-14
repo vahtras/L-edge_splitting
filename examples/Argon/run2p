@@ -1,0 +1,26 @@
+#!/bin/bash
+dal=$1
+mol=$2
+calc=${dal}_${mol}
+tgz=$calc.tar.gz
+if [ -f $tgz ]; then
+    echo "Using $tgz"
+else
+    dalton -get 'AOPROPER AO2SOINT' -f hf_${mol} $dal $mol
+fi
+
+ledges "{1:(3, 4, 9)}" $tgz  --output $calc.hso1
+ledges "{1:(3, 4, 9)}" --two-electron $tgz  --output $calc.hso2
+ledges "{1:(3, 4, 9)}" --all-electron $tgz  --output $calc.hso
+
+width=.002 generate_spectrum.sh $calc.hso{,[12]}
+
+split=$(python -m ledges.peaksplit 2 4 $calc.hso --eV --fmt '%6.2f')
+split1=$(python -m ledges.peaksplit 2 4 $calc.hso1 --eV --fmt '%6.2f')
+split2=$(python -m ledges.peaksplit 4 2 $calc.hso2 --eV --fmt '%6.2f')
+echo $split
+echo $split1
+echo $split2
+
+
+justplot2.py $calc.hso{,[12]}.dat --loc "upper left" --legends "BP $split" "1el $split1" "2el $split2" --title "Argon 2p splitting"
