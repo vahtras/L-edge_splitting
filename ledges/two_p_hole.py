@@ -107,13 +107,13 @@ def main():
 
     ns = {}
     exec("orbitals = %s" % args.orbitals, ns)
-    exec("refocc = %s" % args.reference_occupation)
+    exec("refocc = %s" % args.reference_occupation, ns)
 
     tpe  = two_p_eigenvalues(
         args.daltargz, ns['orbitals'],
         two_electron=args.two_electron,
         all_electron=args.all_electron,
-        reference_occupation=refocc
+        reference_occupation=ns['refocc']
         )
     print(tpe)
     if args.output:
