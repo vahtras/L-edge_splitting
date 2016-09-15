@@ -4,5 +4,5 @@
 -e git+https://github.com/vahtras/daltools.git@master#egg=daltools
 -e git+https://github.com/vahtras/two_electron.git@master#egg=two
 -e git+https://github.com/vahtras/vb.git@master#egg=vb
--e git+/home/olav/Dropbox/git/spectrum.git@master#egg=spectrum
+-e git+https://github.com/vahtras/spectrum.git@master#egg=spectrum
 -e .
