@@ -9,6 +9,7 @@ import util
 from util.full import matrix
 from . import ledges
 #from ledges import tdm
+from ledges.two_p_hole import makeV2
 
 SO_FACTOR = alpha**2/2
 TOL = {'rtol': 1e-7, 'atol': 1e-7}
@@ -46,6 +47,8 @@ class TDMTest(unittest.TestCase):
             'X1SPNORB', 'Y1SPNORB', 'Z1SPNORB',
             filename=fpath("hf_S.AOPROPER")
             )
+        for hso in self.so1:
+            hso *= SO_FACTOR
 
         self.spin_density = ledges.tdm.get_transition_spin_densities(*self.p)
 
@@ -53,48 +56,43 @@ class TDMTest(unittest.TestCase):
         pass
 
     def test_v_aa(self):
-        v_aa = numpy.ndarray((3, 3), dtype=numpy.complex64)
-        for i in range(3):
-            for j in range(3):
-                v_aa[i, j] = self.so1[2] & self.spin_density[i, j]
-        v_aa *= -SO_FACTOR*1j
+        v_aa = makeV2(self.so1, self.spin_density)[:3, :3]
         numpy.testing.assert_allclose(
             v_aa,
-            [[ 0, 0.01692871j, 0],[-0.01692871j, 0, 0], [0, 0, 0]],
+            [[0, 0.03385742j/2, 0], [-0.03385742j/2, 0, 0], [0, 0, 0]],
+            **TOL
+            )
+
+    def test_v_bb(self):
+        v_bb = makeV2(self.so1, self.spin_density)[3:, 3:]
+        numpy.testing.assert_allclose(
+            v_bb,
+            [[0, -0.03385742j/2, 0], [0.03385742j/2, 0, 0], [0, 0, 0]],
             **TOL
             )
 
     def test_v_ab(self):
-        v_ab = numpy.ndarray((3, 3), dtype=numpy.complex64)
-        for i in range(3):
-            for j in range(3):
-                v_ab[i, j] = (self.so1[0] + 1j*self.so1[1]) & \
-                    self.spin_density[i, j]
-        v_ab *= -SO_FACTOR*1j
-        v_ab_ref = numpy.array(
-            [
-                [0, 0, 0.01692871 - 0.00000025153834j],
-                [0, 0, 0.00000025153834 + 0.01698019j],
-                [-0.01692871 + 0.00000025153834j, -0.00000025153834-0.01698019j, 0]
-            ]
+        v_ab = makeV2(self.so1, self.spin_density)[:3, 3:]
+        lx = numpy.array(
+            [[0,0,-0.00000050], [0, 0, 0.03396038], [0.00000050, -0.03396038, 0]]
             )
+        ly = numpy.array(
+            [[0, -0.00000001, -0.03385742 ], [0.00000001, 0, -0.00000050], [0.03385742, 0.00000050, 0]]
+            )
+        v_ab_ref = 1j/2*(lx + 1j*ly)
         numpy.testing.assert_allclose(v_ab, v_ab_ref, **TOL)
 
     def test_v_ba(self):
-        v_ba = numpy.ndarray((3, 3), dtype=numpy.complex64)
-        for i in range(3):
-            for j in range(3):
-                v_ba[i, j] = (self.so1[0] - 1j*self.so1[1]) & \
-                    self.spin_density[i, j]
-        v_ba *= -SO_FACTOR*1j
-        v_ba_ref = numpy.array(
-            [
-                [0, 0, -0.01692871 - 0.00000025153834j],
-                [0, 0, -0.00000025153834 + 0.01698019j],
-                [0.01692871 + 0.00000025153834j, 0.00000025153834-0.01698019j, 0]
-            ]
+        v_ba = makeV2(self.so1, self.spin_density)[3:, :3]
+        lx = numpy.array(
+            [[0,0,-0.00000050], [0, 0, 0.03396038], [0.00000050, -0.03396038, 0]]
             )
+        ly = numpy.array(
+            [[0, -0.00000001, -0.03385742 ], [0.00000001, 0, -0.00000050], [0.03385742, 0.00000050, 0]]
+            )
+        v_ba_ref = 1j/2*(lx - 1j*ly)
         numpy.testing.assert_allclose(v_ba, v_ba_ref, rtol=1e-7, atol=1e-7)
+
 
     def test_state_overlap(self):
         state_overlap = ledges.tdm.get_state_overlap(*self.p)

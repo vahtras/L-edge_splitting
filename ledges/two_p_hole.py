@@ -87,6 +87,19 @@ def makeV(ls):
     V *= 1j/2
     return V
 
+def makeV2(ls, D):
+    #logger.debug("ls = \n %s %s %s" % (ls[0]*CM/2, ls[1]*CM/2, ls[2]*CM/2))
+    V = numpy.ndarray((6, 6), dtype=numpy.complex64)
+    for i in range(3):
+        for j in range(3):
+            V[i, j] = ls[2] & D[i, j]
+            V[i+3, j+3] = -(ls[2] & D[i, j])
+            V[i, j+3] = (ls[0] + 1j*ls[1])& D[i, j]
+            V[i+3, j] = (ls[0] - 1j*ls[1])& D[i, j]
+    V *= -1j
+    return V
+
+
 def get_eigen(V):
     eigenvalues = numpy.linalg.eigvals(V)
     return numpy.sort(eigenvalues.real)
