@@ -51,6 +51,13 @@ class TDMTest(unittest.TestCase):
             hso *= SO_FACTOR
 
         self.spin_density = ledges.tdm.get_transition_spin_densities(*self.p)
+        self.lx = numpy.array(
+            [[0,0,-0.00000050], [0, 0, 0.03396038], [0.00000050, -0.03396038, 0]]
+            )
+        self.ly = numpy.array(
+            [[0, -0.00000001, -0.03385742 ], [0.00000001, 0, -0.00000050], [0.03385742, 0.00000050, 0]]
+            )
+        self.lz = numpy.array([[0, 0.03385742, 0], [-0.03385742,  0, 0], [0, 0, 0]])
 
     def tearDown(self):
         pass
@@ -58,40 +65,24 @@ class TDMTest(unittest.TestCase):
     def test_v_aa(self):
         v_aa = makeV2(self.so1, self.spin_density)[:3, :3]
         numpy.testing.assert_allclose(
-            v_aa,
-            [[0, 0.03385742j/2, 0], [-0.03385742j/2, 0, 0], [0, 0, 0]],
-            **TOL
+            v_aa, 1j/2*self.lz, **TOL
             )
 
     def test_v_bb(self):
         v_bb = makeV2(self.so1, self.spin_density)[3:, 3:]
         numpy.testing.assert_allclose(
-            v_bb,
-            [[0, -0.03385742j/2, 0], [0.03385742j/2, 0, 0], [0, 0, 0]],
-            **TOL
+            v_bb, -1j/2*self.lz, **TOL
             )
 
     def test_v_ab(self):
         v_ab = makeV2(self.so1, self.spin_density)[:3, 3:]
-        lx = numpy.array(
-            [[0,0,-0.00000050], [0, 0, 0.03396038], [0.00000050, -0.03396038, 0]]
-            )
-        ly = numpy.array(
-            [[0, -0.00000001, -0.03385742 ], [0.00000001, 0, -0.00000050], [0.03385742, 0.00000050, 0]]
-            )
-        v_ab_ref = 1j/2*(lx + 1j*ly)
+        v_ab_ref = 1j/2*(self.lx + 1j*self.ly)
         numpy.testing.assert_allclose(v_ab, v_ab_ref, **TOL)
 
     def test_v_ba(self):
         v_ba = makeV2(self.so1, self.spin_density)[3:, :3]
-        lx = numpy.array(
-            [[0,0,-0.00000050], [0, 0, 0.03396038], [0.00000050, -0.03396038, 0]]
-            )
-        ly = numpy.array(
-            [[0, -0.00000001, -0.03385742 ], [0.00000001, 0, -0.00000050], [0.03385742, 0.00000050, 0]]
-            )
-        v_ba_ref = 1j/2*(lx - 1j*ly)
-        numpy.testing.assert_allclose(v_ba, v_ba_ref, rtol=1e-7, atol=1e-7)
+        v_ba_ref = 1j/2*(self.lx - 1j*self.ly)
+        numpy.testing.assert_allclose(v_ba, v_ba_ref, **TOL)
 
 
     def test_state_overlap(self):
