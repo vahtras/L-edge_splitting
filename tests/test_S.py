@@ -3,7 +3,7 @@ import mock
 import sys
 import os
 import numpy
-from ledges.two_p_hole import *
+import ledges.two_p_hole as l2p
 
 from daltools.sirrst import SiriusRestart
 from daltools import prop
@@ -31,7 +31,7 @@ class S_Test(unittest.TestCase):
         self.assertTupleEqual(tuple(self.cmo.nrow), (9, 6, 6, 2, 6, 2, 2, 1))
 
     def test_get_2p_orbitals(self):
-        p_orbitals = get_orbitals(self.cmo, {2:(1,), 3:(1,), 5:(1,)})
+        p_orbitals = l2p.get_orbitals(self.cmo, {2:(1,), 3:(1,), 5:(1,)})
         ref = numpy.zeros((34, 3))
         ref[9:15,  0] =  [1.00179538, 0.00115419, -0.00341405, -0.00112856, 0.00032629, 0.]
         ref[15:21, 1] =  [1.00179538, 0.00115419, -0.00341405, -0.00112856, 0., 0.00032629]
@@ -40,44 +40,44 @@ class S_Test(unittest.TestCase):
         numpy.testing.assert_allclose(p_orbitals, ref, atol=1e-4)
 
     def test_get_indices(self):
-        orbital_indices = get_orbital_indices(self.cmo, {2:(1,), 3:(1,), 5:(1,)})
+        orbital_indices = l2p.get_orbital_indices(self.cmo, {2:(1,), 3:(1,), 5:(1,)})
         self.assertTupleEqual(orbital_indices, (9, 15, 23))
 
     def test_get_x1spnorb(self):
-        ls = get_ls1(self.cmo, self.symorb, self.aoproper)
+        ls = l2p.get_ls1(self.cmo, self.symorb, self.aoproper)
         numpy.testing.assert_allclose(
             ls[0], [[0,0,0], [0, 0, 0.03385742 ], [0, -0.03385742, 0]]
         )
 
     def test_get_y1spnorb(self):
-        ls = get_ls1(self.cmo, self.symorb, self.aoproper)
+        ls = l2p.get_ls1(self.cmo, self.symorb, self.aoproper)
         numpy.testing.assert_allclose(
             ls[1], [[0, 0, -0.03385742 ],[0,0,0],  [0.03385742, 0, 0]]
         )
 
     def test_get_z1spnorb(self):
-        ls = get_ls1(self.cmo, self.symorb, self.aoproper)
+        ls = l2p.get_ls1(self.cmo, self.symorb, self.aoproper)
         numpy.testing.assert_allclose(
             ls[2], [[0, 0.03396038,  0], [-0.03396038,   0, 0], [0,0,0]],
             rtol=1e-6
         )
 
     def test_get_x2spnorb(self):
-        ls2 = get_ls2(self.sirius_rst, self.symorb, self.ao2soint)
+        ls2 = l2p.get_ls2(self.sirius_rst, self.symorb, self.ao2soint)
         numpy.testing.assert_allclose(
             ls2[0], [[0,0,0], [0, 0, -0.00619585 ], [0, 0.00619585, 0]],
             rtol=1e-6
         )
 
     def test_get_y2spnorb(self):
-        ls2 = get_ls2(self.sirius_rst, self.symorb, self.ao2soint)
+        ls2 = l2p.get_ls2(self.sirius_rst, self.symorb, self.ao2soint)
         numpy.testing.assert_allclose(
             ls2[1], [[0, 0, 0.00619585], [0,0,0], [-0.00619585, 0, 0]],
             rtol=1e-6
         )
 
     def test_get_z2spnorb(self):
-        ls2 = get_ls2(self.sirius_rst, self.symorb, self.ao2soint)
+        ls2 = l2p.get_ls2(self.sirius_rst, self.symorb, self.ao2soint)
         numpy.testing.assert_allclose(
             ls2[2], [[0, -0.00616044, 0], [0.00616044, 0, 0], [0,0,0]],
             rtol=1e-6
@@ -91,12 +91,12 @@ class S_Test(unittest.TestCase):
                   [1j + 2, 0, 0, -3j, 0, 0],
                   [0, 1j + 2, 0, 0, -3j, 0],
                   [0, 0, 1j + 2, 0, 0, -3j]]
-        numpy.testing.assert_allclose(makeV(units), expect)   
+        numpy.testing.assert_allclose(l2p.makeV(units), expect)   
 
     def test_eigenvalues(self):
         V = [[0, .5j], [-.5j, 0]]
         numpy.testing.assert_allclose(
-            get_eigen(V),
+            l2p.get_eigen(V),
             [-0.5, 0.5]
         )
             
@@ -106,7 +106,7 @@ class S_Test(unittest.TestCase):
     @mock.patch('ledges.two_p_hole.SiriusRestart')
     @mock.patch('ledges.two_p_hole.tarfile.open')
     def test_untar(self, mock_open, mock_sir, mock_get_ls1, mock_makeV, mock_e):
-        two_p_eigenvalues(self.dal_tar_gz, self.symorb)
+        l2p.two_p_eigenvalues(self.dal_tar_gz, self.symorb)
         mock_open.return_value = mock.Mock()
         mock_open.assert_called_with(self.dal_tar_gz, 'r:gz')
 
@@ -118,7 +118,7 @@ class S_Test(unittest.TestCase):
     def test_extract(self, mock_open, mock_sir, mock_get_ls1, mock_makeV, mock_e):
         mock_return_object = mock.Mock()
         mock_open.return_value = mock_return_object
-        two_p_eigenvalues(self.dal_tar_gz, self.symorb)
+        l2p.two_p_eigenvalues(self.dal_tar_gz, self.symorb)
         mock_return_object.extractall.assert_called_with(
             path='/tmp',
         )
