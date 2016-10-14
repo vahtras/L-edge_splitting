@@ -2,7 +2,7 @@
 import numpy as np
 import matplotlib
 matplotlib.use("TkAgg")
-import matplotlib.pyplot as mpl
+import matplotlib.pyplot as plt
 import sys
 
 
@@ -24,6 +24,7 @@ def main():
     parser.add_argument('--styles', nargs='+',choices=['solid', 'dash', 'dot'], help='Line styles')
     parser.add_argument('--xlim', nargs=2, type=float, help='x-axis range')
     parser.add_argument('--loc', help='Legend location')
+    parser.add_argument('--pdf', help='Save pdf')
 
 
     args = parser.parse_args()
@@ -49,33 +50,38 @@ def main():
         styles = ('solid',)*len(args.files)
 
     if args.suptitle:
-        mpl.suptitle(args.suptitle)
+        plt.suptitle(args.suptitle)
 
     if args.title:
-        mpl.title(args.title)
+        plt.title(args.title)
 
     if args.xlabel:
-        mpl.xlabel(args.xlabel, fontsize=14)
+        plt.xlabel(args.xlabel, fontsize=14)
 
     if args.ylabel:
-        mpl.ylabel(args.ylabel, fontsize=14)
+        plt.ylabel(args.ylabel, fontsize=14)
 
     if args.xlim:
-        mpl.xlim(*args.xlim)
+        plt.xlim(*args.xlim)
 
 
     for f,l,col,s in zip(args.files, legends, colors, styles):
         npf = np.loadtxt(f)
         for c in range(1, npf.shape[1]):
-            mpl.plot(npf[:, 0], npf[:, c], label=l, color=col, linestyle=STYLES[s])
+            plt.plot(npf[:, 0], npf[:, c], label=l, color=col, linestyle=STYLES[s])
 
     if args.filenames or args.legends:
         if args.loc:
-            mpl.legend(loc=args.loc)
+            plt.legend(loc=args.loc)
         else:
-            mpl.legend()
+            plt.legend()
 
-    mpl.show()
+
+    if args.pdf:
+        plt.savefig(args.pdf)
+        plt.close()
+    else:
+        plt.show()
 
 if __name__ == "__main__":
     sys.exit(main())
